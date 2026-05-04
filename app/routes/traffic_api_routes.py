@@ -5,32 +5,22 @@ from app.services.llm_comment_service import generate_traffic_comment
 
 traffic_api_bp = Blueprint("traffic_api", __name__)
 
-
 @traffic_api_bp.route("/traffic/cctv-list")
 def traffic_cctv_list():
-    markers = get_map_cctv_markers()
-    return success(markers)
-
+    return success(get_map_cctv_markers())
 
 @traffic_api_bp.route("/traffic/comment", methods=["POST"])
 def traffic_comment():
     data = request.get_json() or {}
 
-    road_name = data.get("road_name")
-    avg_speed = data.get("avg_speed")
-    vehicle_count = data.get("vehicle_count")
-    status = data.get("status")
-
-    if not road_name:
+    if not data.get("road_name"):
         return fail("road_name is required", 400)
 
     comment = generate_traffic_comment(
-        road_name=road_name,
-        avg_speed=avg_speed,
-        vehicle_count=vehicle_count,
-        status=status,
+        road_name=data.get("road_name"),
+        avg_speed=data.get("avg_speed"),
+        vehicle_count=data.get("vehicle_count"),
+        status=data.get("status"),
     )
 
-    return success({
-        "comment": comment
-    })
+    return success({"comment": comment})
