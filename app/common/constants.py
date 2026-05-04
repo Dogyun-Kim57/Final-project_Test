@@ -1,0 +1,7 @@
+EVENT_TYPE_PERSON = "사람 감지"
+EVENT_TYPE_VEHICLE = "차량 감지"
+EVENT_TYPE_CONGESTION = "정체 의심"
+
+RISK_LOW = "주의"
+RISK_MEDIUM = "위험"
+RISK_HIGH = "긴급"

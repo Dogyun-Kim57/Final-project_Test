@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="app-layout">
+
+  <aside class="sidebar">
+    <h1>AI CCTV SYSTEM</h1>
+
+    <nav>
+      <a class="active">대시보드</a>
+      <a>카메라 관리</a>
+      <a>실시간 모니터링</a>
+      <a>탐지 결과</a>
+      <a>이벤트 로그</a>
+      <a>설정</a>
+      <a>로그아웃</a>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+
+    <section class="summary-grid">
+      <div class="summary-card">
+        <span>전체 카메라</span>
+        <strong>{{ dashboard.summary.total_cameras }}</strong>
+      </div>
+
+      <div class="summary-card">
+        <span>실시간 모니터링</span>
+        <strong>{{ dashboard.summary.live_cameras }}</strong>
+      </div>
+
+      <div class="summary-card">
+        <span>오늘 탐지 이벤트</span>
+        <strong>{{ dashboard.summary.today_events }}</strong>
+      </div>
+
+      <div class="summary-card">
+        <span>총 이벤트</span>
+        <strong>{{ dashboard.summary.total_events }}</strong>
+      </div>
+    </section>
+
+    <section class="content-grid">
+
+      <div class="monitor-card">
+        <h2>실시간 모니터링</h2>
+
+        <div class="camera-grid">
+          {% for camera in dashboard.cameras %}
+          <article class="camera-card">
+            <div class="camera-title">
+              Camera 0{{ camera.id }} - {{ camera.location_name }}
+            </div>
+
+            <div class="camera-image">
+              <img src="{{ camera.thumbnail_url }}" alt="{{ camera.name }}">
+            </div>
+
+            <div class="camera-footer">
+              <span>2025-05-18 14:23:45</span>
+              {% if camera.is_live %}
+              <span class="live">● LIVE</span>
+              {% endif %}
+            </div>
+          </article>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="recent-card">
+        <h2>최근 탐지 결과</h2>
+
+        {% for event in dashboard.recent_events %}
+        <div class="event-item">
+          <img src="{{ event.snapshot_url }}" alt="snapshot">
+
+          <div>
+            <strong class="event-badge">{{ event.event_type }}</strong>
+            <p>{{ event.camera_name }} - {{ event.location_name }}</p>
+            <span>{{ event.detected_at }}</span>
+          </div>
+        </div>
+        {% endfor %}
+
+        <button class="more-btn">더보기</button>
+      </div>
+
+    </section>
+
+  </main>
+</div>
+{% endblock %}
