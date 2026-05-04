@@ -3,6 +3,10 @@ from app.extensions import db
 from app.models.camera import Camera
 from app.models.detection_event import DetectionEvent
 
+# ✔ DB 초기화
+# ✔ 테스트 데이터 생성
+# ✔ 디버깅용 더미 데이터
+
 app = create_app()
 
 with app.app_context():

@@ -1,15 +1,11 @@
 {% extends "base.html" %}
 
-{% block extra_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
-{% endblock %}
-
 {% block content %}
 <div class="app-layout">
 
+  <!-- 사이드바 -->
   <aside class="sidebar">
     <h1>AI TRAFFIC CONTROL</h1>
-
     <nav>
       <a class="active" href="/">대시보드</a>
       <a href="/monitoring">실시간 모니터링</a>
@@ -20,81 +16,142 @@
     </nav>
   </aside>
 
+  <!-- 메인 -->
   <main class="main-content">
 
-    <section class="summary-grid">
-      <div class="summary-card">
-        <span>전체 CCTV</span>
-        <strong>{{ dashboard.summary.total_cameras }}</strong>
-      </div>
+    <!-- ========================= -->
+    <!-- 🔵 CCTV / 이벤트 요약 -->
+    <!-- ========================= -->
+    <div class="monitor-card">
+      <h2>시스템 상태 요약</h2>
 
-      <div class="summary-card">
-        <span>실시간 모니터링</span>
-        <strong>{{ dashboard.summary.live_cameras }}</strong>
-      </div>
+      <div class="metric-grid" style="margin-top:20px;">
+        <div>
+          <span>총 CCTV</span>
+          <strong>{{ data.summary.total_cameras }}</strong>
+        </div>
 
-      <div class="summary-card">
-        <span>오늘 탐지 이벤트</span>
-        <strong>{{ dashboard.summary.today_events }}</strong>
-      </div>
+        <div>
+          <span>실시간 CCTV</span>
+          <strong>{{ data.summary.live_cameras }}</strong>
+        </div>
 
-      <div class="summary-card">
-        <span>총 이벤트</span>
-        <strong>{{ dashboard.summary.total_events }}</strong>
-      </div>
-    </section>
+        <div>
+          <span>오늘 이벤트</span>
+          <strong>{{ data.summary.today_events }}</strong>
+        </div>
 
-    <section class="content-grid">
-
-      <div class="monitor-card">
-        <h2>실시간 CCTV 현황</h2>
-
-        <div class="camera-grid">
-          {% for camera in dashboard.cameras %}
-          <article class="camera-card">
-            <div class="camera-title">
-              Camera 0{{ camera.id }} - {{ camera.location_name }}
-            </div>
-
-            <div class="camera-image">
-              <img src="{{ camera.thumbnail_url }}" alt="{{ camera.name }}">
-            </div>
-
-            <div class="camera-footer">
-              <span>실시간 상태 확인</span>
-              {% if camera.is_live %}
-              <span class="live">● LIVE</span>
-              {% endif %}
-            </div>
-          </article>
-          {% endfor %}
+        <div>
+          <span>총 이벤트</span>
+          <strong>{{ data.summary.total_events }}</strong>
         </div>
       </div>
+    </div>
 
-      <div class="recent-card">
-        <h2>최근 탐지 레포트</h2>
+    <!-- ========================= -->
+    <!-- 📊 대시보드 차트 -->
+    <!-- ========================= -->
+    <div class="dashboard-chart-grid">
 
-        {% for event in dashboard.recent_events %}
-        <div class="event-item">
-          <img src="{{ event.snapshot_url }}" alt="snapshot">
+      <div class="monitor-card chart-card">
+        <h3>CCTV 운영 상태</h3>
+        <canvas id="cameraStatusChart"></canvas>
+      </div>
 
-          <div>
-            <strong class="event-badge">{{ event.event_type }}</strong>
-            <p>{{ event.camera_name }} - {{ event.location_name }}</p>
-            <span>{{ event.detected_at }}</span>
-          </div>
+      <div class="monitor-card chart-card">
+        <h3>경로 위험도 비율</h3>
+        <canvas id="routeRiskChart"></canvas>
+      </div>
+
+      <div class="monitor-card chart-card chart-wide">
+        <h3>최근 경로 위험 점수</h3>
+        <canvas id="recentRouteScoreChart"></canvas>
+      </div>
+
+    </div>
+
+    <!-- ========================= -->
+    <!-- 🔥 경로 분석 요약 -->
+    <!-- ========================= -->
+    <div class="monitor-card">
+      <h2>경로 분석 요약</h2>
+
+      <div class="metric-grid" style="margin-top:20px;">
+        <div>
+          <span>총 분석</span>
+          <strong>{{ data.route_summary.total }}</strong>
         </div>
+
+        <div>
+          <span>평균 점수</span>
+          <strong>{{ data.route_summary.avg_score }}점</strong>
+        </div>
+
+        <div>
+          <span>높음</span>
+          <strong>{{ data.route_summary.high }}</strong>
+        </div>
+
+        <div>
+          <span>주의</span>
+          <strong>{{ data.route_summary.medium }}</strong>
+        </div>
+
+        <div>
+          <span>낮음</span>
+          <strong>{{ data.route_summary.low }}</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================= -->
+    <!-- 🔥 최근 경로 분석 -->
+    <!-- ========================= -->
+    <div class="monitor-card">
+      <h3>최근 경로 분석</h3>
+
+      <ul style="margin-top:16px;">
+        {% for r in data.recent_routes %}
+        <li style="margin-bottom:12px;">
+          <strong>{{ r.start }} → {{ r.end }}</strong><br>
+          위험도: {{ r.risk }} ({{ r.score }}점) / {{ r.time }}
+        </li>
+        {% else %}
+        <li style="color:#64748b;">최근 경로 데이터가 없습니다.</li>
         {% endfor %}
+      </ul>
+    </div>
 
-        <button class="more-btn" type="button" onclick="location.href='/reports'">레포트 보기</button>
-      </div>
+    <!-- ========================= -->
+    <!-- 🔵 최근 탐지 이벤트 -->
+    <!-- ========================= -->
+    <div class="monitor-card">
+      <h3>최근 탐지 이벤트</h3>
 
-    </section>
+      <ul style="margin-top:16px;">
+        {% for e in data.recent_events %}
+        <li style="margin-bottom:10px;">
+          {{ e.detected_at }} |
+          {{ e.event_type }} |
+          {{ e.camera_name }}
+        </li>
+        {% else %}
+        <li style="color:#64748b;">최근 이벤트 없음</li>
+        {% endfor %}
+      </ul>
+    </div>
 
   </main>
 </div>
-{% endblock %}
 
-{% block extra_js %}
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const routeRiskChart = {{ data.charts.route_risk | tojson }};
+  const recentRouteScoreChart = {{ data.charts.recent_route_score | tojson }};
+  const cameraStatusChart = {{ data.charts.camera_status | tojson }};
+</script>
+
 <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 {% endblock %}

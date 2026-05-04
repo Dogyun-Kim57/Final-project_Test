@@ -21,13 +21,78 @@
 
   <main class="main-content">
 
-    <div class="route-box">
-      <input id="start" placeholder="출발지">
-      <input id="end" placeholder="도착지">
-      <button onclick="searchRoute()">경로 검색</button>
-    </div>
+    <section class="route-header">
+      <h2>운전 경로 추천</h2>
+      <p>자동완성 기반 경로 탐색 + 지도 표시</p>
+    </section>
 
-    <div id="map"></div>
+    <!-- 🔥 form 쓰지 않는다 (핵심) -->
+    <section class="route-search-card">
+
+      <div class="route-input-group">
+        <label>출발지</label>
+        <input id="startInput" type="text" placeholder="예: 서울역">
+      </div>
+
+      <div class="route-input-group">
+        <label>도착지</label>
+        <input id="endInput" type="text" placeholder="예: 강남역">
+      </div>
+
+      <button id="searchRouteBtn" type="button">경로 검색</button>
+
+    </section>
+
+    <section class="route-layout">
+
+      <div class="map-card">
+        <div id="map"></div>
+      </div>
+
+      <aside class="route-panel">
+
+        <h3>경로 정보</h3>
+
+        <div class="info-box">
+          <span>출발지</span>
+          <strong id="startName">-</strong>
+        </div>
+
+        <div class="info-box">
+          <span>도착지</span>
+          <strong id="endName">-</strong>
+        </div>
+
+        <div class="metric-grid">
+          <div>
+            <span>거리</span>
+            <strong id="distance">-</strong>
+          </div>
+
+          <div>
+            <span>시간</span>
+            <strong id="duration">-</strong>
+          </div>
+
+          <div>
+            <span>주변 CCTV</span>
+            <strong id="nearbyCctvCount">-</strong>
+          </div>
+
+          <div>
+            <span>정체 위험도</span>
+            <strong id="riskLevel">-</strong>
+          </div>
+        </div>
+
+        <div class="comment-box">
+          <span>AI 경로 추천 코멘트</span>
+          <p id="routeComment">경로를 검색하세요.</p>
+        </div>
+
+      </aside>
+
+    </section>
 
   </main>
 </div>
@@ -35,5 +100,11 @@
 
 {% block extra_js %}
 <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey={{ kakao_map_js_key }}"></script>
+
+<script
+  src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&libraries=places&callback=initGoogleAutocomplete"
+  async defer>
+</script>
+
 <script src="{{ url_for('static', filename='js/navigation.js') }}"></script>
 {% endblock %}

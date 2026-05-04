@@ -16,6 +16,7 @@ class Config:
     YOLO_MODEL_PATH = os.getenv("YOLO_MODEL_PATH", "yolov8n.pt")
 
     KAKAO_MAP_JS_KEY = os.getenv("KAKAO_MAP_JS_KEY")
+    KAKAO_REST_API_KEY = os.getenv("KAKAO_REST_API_KEY")
 
     ITS_API_KEY = os.getenv("ITS_API_KEY")
     ITS_CCTV_BASE_URL = os.getenv(
@@ -25,3 +26,11 @@ class Config:
 
     LLM_API_KEY = os.getenv("LLM_API_KEY")
     LLM_MODEL = os.getenv("LLM_MODEL", "gpt-4o-mini")
+
+    # 프론트 및 백엔드용 API키
+    GOOGLE_MAPS_API_KEY = os.getenv("GOOGLE_MAPS_API_KEY")
+    GOOGLE_ROUTES_API_KEY = os.getenv("GOOGLE_ROUTES_API_KEY")
+
+    MODEL_PATH = "yolov8n.pt"
+    DETECTION_THRESHOLD = 0.5
+    API_STATUS = "정상"

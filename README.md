@@ -1,137 +1,148 @@
-# Fainal-project_Test
-파이널 프로젝트를 위한 원리 파악
-
-
-```a
+### 프로젝트 작업 트리
+```
 app/
 │
-├── __init__.py
-│   → Flask 앱 생성 (create_app)
-│   → DB 초기화 및 Blueprint 등록
-│
 ├── config.py
-│   → 환경 설정 관리 (.env)
-│   → API 키 (ITS, Kakao 등)
+│   → 환경 설정 (API 키, 모델 경로, 임계값 등)
 │
 ├── extensions.py
-│   → SQLAlchemy 등 확장 모듈 초기화
+│   → Flask 확장 초기화 (db, migrate, socket 등)
+│
+├── __init__.py
+│   → create_app()에서 전체 앱 생성 및 Blueprint 등록
 │
 ├── common/
-│   ├── response.py
-│   │   → API 응답 통일 (success, fail)
+│   ├── constants.py
+│   │   → 공통 상수 정의 (위험도 기준, 상태값 등)
 │   │
-│   └── constants.py
-│       → 공통 상수 정의 (필요 시 사용)
+│   ├── response.py
+│   │   → API 응답 포맷 (success, fail 통일)
+│   │
+│   └── __init__.py
 │
 ├── models/
 │   ├── camera.py
-│   │   → CCTV 카메라 DB 모델
+│   │   → CCTV 카메라 정보 (위치, 상태 등)
 │   │
 │   ├── detection_event.py
-│   │   → 탐지 이벤트 DB 모델 (정체, 사고 등)
+│   │   → 객체 탐지 이벤트 (위험도, 탐지시간 등)
+│   │
+│   ├── post.py
+│   │   → 게시판 글 + 첨부파일 모델
+│   │
+│   ├── route_report.py
+│   │   → 경로 분석 결과 저장 (거리, 시간, 위험도 등)
 │   │
 │   └── __init__.py
-│       → 모델 import 관리 (DB 생성 시 필수)
 │
 ├── repositories/
 │   ├── camera_repository.py
-│   │   → 카메라 DB 접근 로직
+│   │   → 카메라 DB 조회 (count, 리스트 등)
 │   │
 │   ├── detection_repository.py
-│   │   → 탐지 이벤트 DB 접근
+│   │   → 탐지 이벤트 조회 및 통계
+│   │
+│   ├── post_repository.py
+│   │   → 게시글 저장/조회
+│   │
+│   ├── route_report_repository.py
+│   │   → 경로 분석 데이터 조회
 │   │
 │   └── __init__.py
 │
 ├── services/
-│   ├── dashboard_service.py
-│   │   → 대시보드 데이터 생성
-│   │
-│   ├── its_api_service.py
-│   │   → ITS Open API 호출 (CCTV 목록 가져오기)
-│   │
-│   ├── kakao_map_service.py
-│   │   → 지도용 데이터 변환 (마커 등)
-│   │
-│   ├── llm_comment_service.py
-│   │   → AI 교통 코멘트 생성
-│   │
 │   ├── camera_service.py
-│   │   → (향후) CCTV 처리 로직
+│   │   → 카메라 데이터 가공 (프론트용 변환)
 │   │
 │   ├── detection_service.py
-│   │   → (향후) 탐지/정체 분석 로직
+│   │   → 최근 이벤트 정리
+│   │
+│   ├── congestion_service.py
+│   │   → 정체 점수 계산 로직 (핵심 알고리즘)
+│   │
+│   ├── dashboard_service.py
+│   │   → 대시보드 데이터 통합 (카메라 + 이벤트 + 경로)
+│   │
+│   ├── its_api_service.py
+│   │   → ITS CCTV 외부 API 연동
+│   │
+│   ├── kakao_map_service.py
+│   │   → 지도 관련 처리 (좌표 변환 등)
+│   │
+│   ├── kakao_route_service.py
+│   │   → 카카오 길찾기 API (실제 경로 계산)
+│   │
+│   ├── route_analysis_service.py
+│   │   → 경로 주변 CCTV 분석 (핵심 로직)
+│   │
+│   ├── route_report_service.py
+│   │   → 분석 결과 DB 저장
+│   │
+│   ├── post_service.py
+│   │   → 게시글 + 파일 업로드 처리
+│   │
+│   ├── llm_comment_service.py
+│   │   → AI 코멘트 생성 (선택 기능)
 │   │
 │   └── __init__.py
 │
 ├── routes/
 │   ├── main_routes.py
-│   │   → 페이지 라우팅
-│   │      /              → 대시보드
-│   │      /monitoring    → 실시간 CCTV
-│   │      /navigation    → 경로 추천
-│   │      /reports       → 레포트
-│   │      /board         → 게시판
-│   │      /settings      → 설정
+│   │   → 페이지 렌더링 (/, /navigation, /reports 등)
 │   │
-│   ├── api_routes.py
-│   │   → 대시보드 API (/api/dashboard)
+│   ├── post_routes.py
+│   │   → 게시판 API (/board)
+│   │
+│   ├── route_api_routes.py
+│   │   → 경로 계산 + 분석 API (/api/route)
 │   │
 │   ├── traffic_api_routes.py
-│   │   → ITS 관련 API
-│   │      /api/traffic/cctv-list
+│   │   → ITS 데이터 API
+│   │
+│   ├── map_routes.py
+│   │   → 지도 관련 API
+│   │
+│   ├── api_routes.py
+│   │   → 기타 통합 API
+│   │
+│   ├── dashboard_routes.py
+│   │   → (선택) API형 대시보드
 │   │
 │   └── __init__.py
 │
 ├── static/
 │   ├── css/
-│   │   ├── base.css
-│   │   │   → 전체 공통 스타일
-│   │   │
-│   │   ├── dashboard.css
-│   │   │   → 대시보드 전용 UI
-│   │   │
-│   │   ├── monitoring.css
-│   │   │   → CCTV 영상 UI
-│   │   │
-│   │   └── navigation.css
-│   │       → 지도 / 경로 UI
+│   │   → 화면 스타일
 │   │
 │   ├── js/
-│   │   ├── dashboard.js
-│   │   │   → 대시보드 JS
-│   │   │
-│   │   ├── monitoring.js
-│   │   │   → CCTV 목록 조회 + 영상 출력
-│   │   │
-│   │   └── navigation.js
-│   │       → 지도 + 마커 + 경로 로직
+│   │   → 프론트 로직 (지도, 그래프 등)
 │   │
-│   └── images/
-│       → 이미지 리소스
+│   ├── images/
+│   │   → 이미지 리소스
+│   │
+│   └── videos/
+│       → 영상 리소스
 │
-├── templates/
-│   ├── base.html
-│   │   → 공통 레이아웃 (header, block 구조)
-│   │
-│   └── main/
-│       ├── dashboard.html
-│       │   → 메인 통계 화면
-│       │
-│       ├── monitoring.html
-│       │   → CCTV 영상 모니터링
-│       │
-│       ├── navigation.html
-│       │   → 지도 + 경로 추천 (핵심 기능)
-│       │
-│       ├── reports.html
-│       │   → 정체/이벤트 기록
-│       │
-│       ├── board.html
-│       │   → 게시판
-│       │
-│       └── settings.html
-│           → 설정 페이지
-
-
-
+└── templates/
+    ├── base.html
+    │   → 전체 레이아웃 (헤더/사이드바)
+    │
+    └── main/
+        ├── dashboard.html
+        │   → 대시보드
+        │
+        ├── monitoring.html
+        │   → 실시간 모니터링
+        │
+        ├── navigation.html
+        │   → 경로 탐색
+        │
+        ├── reports.html
+        │   → 분석 결과 목록
+        │
+        ├── board.html
+        │   → 게시판
+        │
+        └── settings.html
+            → 설정 페이지
 ```
