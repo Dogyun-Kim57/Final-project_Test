@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+{% endblock %}
+
 {% block content %}
 <div class="app-layout">
 
@@ -7,13 +11,14 @@
     <h1>AI CCTV SYSTEM</h1>
 
     <nav>
-      <a class="active">대시보드</a>
-      <a>카메라 관리</a>
-      <a>실시간 모니터링</a>
-      <a>탐지 결과</a>
-      <a>이벤트 로그</a>
-      <a>설정</a>
-      <a>로그아웃</a>
+      <a class="active" href="/">대시보드</a>
+      <a href="#">카메라 관리</a>
+      <a href="#">실시간 모니터링</a>
+      <a href="#">탐지 결과</a>
+      <a href="#">이벤트 로그</a>
+      <a href="/traffic-map">교통 지도</a>
+      <a href="#">설정</a>
+      <a href="#">로그아웃</a>
     </nav>
   </aside>
 
@@ -90,4 +95,8 @@
 
   </main>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 {% endblock %}

@@ -5,11 +5,13 @@
   <title>AI Traffic Control</title>
 
   <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+  {% block extra_css %}{% endblock %}
 </head>
 <body>
+
   {% block content %}{% endblock %}
 
-  <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+  {% block extra_js %}{% endblock %}
 </body>
 </html>
