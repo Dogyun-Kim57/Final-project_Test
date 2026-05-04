@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>대시보드</h2>
+
+<div class="monitor-card">
+  <div class="metric-grid">
+    <div>
+      <span>총 CCTV</span>
+      <strong>{{ data.summary.total_cameras }}</strong>
+    </div>
+
+    <div>
+      <span>실시간 CCTV</span>
+      <strong>{{ data.summary.live_cameras }}</strong>
+    </div>
+
+    <div>
+      <span>오늘 이벤트</span>
+      <strong>{{ data.summary.today_events }}</strong>
+    </div>
+
+    <div>
+      <span>총 이벤트</span>
+      <strong>{{ data.summary.total_events }}</strong>
+    </div>
+  </div>
+</div>
+
+<div class="monitor-card">
+  <canvas id="cameraStatusChart"></canvas>
+  <canvas id="routeRiskChart"></canvas>
+  <canvas id="recentRouteScoreChart"></canvas>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const routeRiskChart = {{ data.charts.route_risk | tojson }};
+const recentRouteScoreChart = {{ data.charts.recent_route_score | tojson }};
+const cameraStatusChart = {{ data.charts.camera_status | tojson }};
+</script>
+
+<script type="module" src="{{ url_for('static', filename='js/pages/dashboard.js') }}"></script>
+{% endblock %}

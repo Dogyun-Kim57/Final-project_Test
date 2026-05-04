@@ -1,0 +1,18 @@
+.dashboard-chart-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.chart-card {
+  min-height: 320px;
+}
+
+.chart-card canvas {
+  max-height: 260px;
+}
+
+.chart-wide {
+  grid-column: 1 / -1;
+}

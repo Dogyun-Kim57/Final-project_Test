@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>AI Traffic Control</title>
-
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-
-  {% block extra_css %}{% endblock %}
+  {% include "components/head.html" %}
 </head>
+
 <body>
 
-  {% block content %}{% endblock %}
+  <div class="app-layout">
+
+    {% include "components/sidebar.html" %}
+
+    <main class="main-content">
+      {% block content %}{% endblock %}
+    </main>
+
+  </div>
 
   {% block extra_js %}{% endblock %}
+
 </body>
 </html>

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/monitoring.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<h2>실시간 CCTV 모니터링</h2>
+
+<div class="monitor-filter">
+  <select id="regionSelect">
+    <option value="seoul">서울</option>
+    <option value="gyeonggi">경기</option>
+  </select>
+  <button id="reloadBtn">조회</button>
+</div>
+
+<div class="monitor-layout">
+  <div id="cctvList"></div>
+
+  <div>
+    <div id="videoArea">CCTV 선택</div>
+
+    <div>
+      <p>이름: <span id="name"></span></p>
+      <p>도로: <span id="road"></span></p>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script type="module" src="{{ url_for('static', filename='js/pages/monitoring.js') }}"></script>
+{% endblock %}

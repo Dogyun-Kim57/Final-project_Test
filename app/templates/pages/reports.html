@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>탐지 레포트</h2>
+
+<table class="report-table">
+  {% for report in reports %}
+  <tr>
+    <td>{{ report.created_at }}</td>
+    <td>{{ report.start_name }} → {{ report.end_name }}</td>
+    <td>{{ report.risk_level }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}

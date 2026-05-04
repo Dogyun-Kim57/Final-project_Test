@@ -1,0 +1,16 @@
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 18px;
+}
+
+.report-table th {
+  padding: 12px;
+  text-align: left;
+  background: #f1f5f9;
+}
+
+.report-table td {
+  padding: 12px;
+  border-bottom: 1px solid #e5e7eb;
+}

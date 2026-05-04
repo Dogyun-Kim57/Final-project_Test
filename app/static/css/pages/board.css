@@ -1,0 +1,18 @@
+.board-form input,
+.board-form textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.board-form textarea {
+  height: 120px;
+}
+
+.post-item {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 10px;
+}

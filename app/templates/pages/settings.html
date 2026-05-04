@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>설정</h2>
+
+<div class="setting-item">
+  <p>모델: {{ config.MODEL_PATH }}</p>
+  <p>임계값: {{ config.DETECTION_THRESHOLD }}</p>
+</div>
+
+{% endblock %}

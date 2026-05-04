@@ -1,5 +1,5 @@
 .monitor-filter {
-  margin: 12px 0;
+  margin: 12px 0 18px;
   display: flex;
   gap: 10px;
 }
@@ -33,11 +33,4 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.info-panel {
-  background: white;
-  margin-top: 10px;
-  padding: 12px;
-  border-radius: 10px;
 }

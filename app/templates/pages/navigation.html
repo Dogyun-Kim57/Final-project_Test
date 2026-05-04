@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/navigation.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<h2>운전 경로 추천</h2>
+
+<input id="startInput" placeholder="출발지">
+<input id="endInput" placeholder="도착지">
+<button id="searchRouteBtn">검색</button>
+
+<div id="map"></div>
+
+<div>
+  <p>거리: <span id="distance"></span></p>
+  <p>시간: <span id="duration"></span></p>
+  <p>위험도: <span id="riskLevel"></span></p>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey={{ kakao_map_js_key }}"></script>
+
+<script
+  src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&libraries=places&callback=initGoogleAutocomplete"
+  async defer>
+</script>
+
+<script type="module" src="{{ url_for('static', filename='js/pages/navigation.js') }}"></script>
+{% endblock %}
