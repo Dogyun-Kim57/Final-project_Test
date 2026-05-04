@@ -1,101 +1,74 @@
-import requests
 from flask import current_app
+import requests
 
 
-def get_cctv_list():
-    """
-    ITS CCTV API 호출.
-    실패하거나 데이터 구조가 다르면 데모용 fallback 데이터를 반환한다.
-    """
+REGION_BOUNDS = {
+    "seoul": {
+        "minX": "126.76",
+        "maxX": "127.18",
+        "minY": "37.41",
+        "maxY": "37.70",
+    },
+    "gyeonggi": {
+        "minX": "126.50",
+        "maxX": "127.80",
+        "minY": "36.90",
+        "maxY": "38.30",
+    },
+    "incheon": {
+        "minX": "126.30",
+        "maxX": "126.85",
+        "minY": "37.20",
+        "maxY": "37.65",
+    },
+    "capital": {
+        "minX": "126.30",
+        "maxX": "127.80",
+        "minY": "36.90",
+        "maxY": "38.30",
+    },
+}
+
+
+def get_cctv_list(region="seoul"):
     api_key = current_app.config.get("ITS_API_KEY")
     base_url = current_app.config.get("ITS_CCTV_BASE_URL")
+
+    bounds = REGION_BOUNDS.get(region, REGION_BOUNDS["seoul"])
 
     params = {
         "apiKey": api_key,
         "type": "all",
         "cctvType": "1",
-        "minX": "126.7",
-        "maxX": "127.3",
-        "minY": "37.3",
-        "maxY": "37.8",
+        "minX": bounds["minX"],
+        "maxX": bounds["maxX"],
+        "minY": bounds["minY"],
+        "maxY": bounds["maxY"],
         "getType": "json",
     }
 
     try:
-        response = requests.get(base_url, params=params, timeout=5)
-        response.raise_for_status()
-        data = response.json()
+        res = requests.get(base_url, params=params, timeout=10)
+        data = res.json()
 
-        raw_items = (
-            data.get("response", {})
-                .get("data", [])
-        )
+        cctv_data = data.get("response", {}).get("data", [])
 
-        cctv_list = []
-
-        for idx, item in enumerate(raw_items[:20], start=1):
-            name = item.get("cctvname") or item.get("name") or f"CCTV {idx}"
-            lat = item.get("coordy") or item.get("lat")
-            lng = item.get("coordx") or item.get("lng")
-            cctv_url = item.get("cctvurl") or item.get("url")
-
-            if not lat or not lng:
-                continue
-
-            cctv_list.append({
-                "id": idx,
-                "name": name,
-                "road_name": item.get("roadsectionid", "도로 정보 없음"),
-                "lat": float(lat),
-                "lng": float(lng),
-                "cctv_url": cctv_url,
+        result = []
+        for item in cctv_data:
+            result.append({
+                "id": item.get("cctvid"),
+                "name": item.get("cctvname"),
+                "road_name": item.get("roadsectionid"),
+                "lat": float(item.get("coordy")),
+                "lng": float(item.get("coordx")),
+                "cctv_url": item.get("cctvurl"),
                 "status": "정상",
-                "avg_speed": 25 + (idx % 4) * 7,
-                "vehicle_count": 8 + (idx % 6),
+                "avg_speed": 0,
+                "vehicle_count": 0,
             })
 
-        if cctv_list:
-            return cctv_list
+        return result
 
     except Exception as e:
-        print("[ITS API ERROR]", e)
-
-    return get_fallback_cctv_list()
-
-
-def get_fallback_cctv_list():
-    return [
-        {
-            "id": 1,
-            "name": "Demo CCTV 01",
-            "road_name": "경부고속도로 양재IC 인근",
-            "lat": 37.4683,
-            "lng": 127.0396,
-            "cctv_url": "",
-            "status": "정체 의심",
-            "avg_speed": 18,
-            "vehicle_count": 14,
-        },
-        {
-            "id": 2,
-            "name": "Demo CCTV 02",
-            "road_name": "올림픽대로 반포대교 인근",
-            "lat": 37.5122,
-            "lng": 127.0124,
-            "cctv_url": "",
-            "status": "주의",
-            "avg_speed": 32,
-            "vehicle_count": 10,
-        },
-        {
-            "id": 3,
-            "name": "Demo CCTV 03",
-            "road_name": "강변북로 한남대교 인근",
-            "lat": 37.5295,
-            "lng": 127.0083,
-            "cctv_url": "",
-            "status": "원활",
-            "avg_speed": 48,
-            "vehicle_count": 6,
-        },
-    ]
+        print("[ITS ERROR]", e)
+        return []

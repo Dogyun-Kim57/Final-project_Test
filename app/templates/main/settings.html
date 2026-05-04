@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="app-layout">
+  <aside class="sidebar">
+    <h1>AI TRAFFIC CONTROL</h1>
+    <nav>
+      <a href="/">대시보드</a>
+      <a href="/monitoring">실시간 모니터링</a>
+      <a href="/reports">탐지 레포트</a>
+      <a href="/navigation">운전 경로 추천</a>
+      <a href="/board">게시판</a>
+      <a class="active" href="/settings">설정</a>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <div class="monitor-card">
+      <h2>설정</h2>
+      <p>API 상태, 임계값, 모델 경로 등을 관리할 화면입니다.</p>
+    </div>
+  </main>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+.monitor-filter {
+  margin: 12px 0;
+  display: flex;
+  gap: 10px;
+}
+
+.monitor-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 18px;
+}
+
+.cctv-list {
+  background: white;
+  padding: 10px;
+  border-radius: 12px;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.cctv-item {
+  padding: 10px;
+  margin-bottom: 8px;
+  background: #f1f5f9;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.video-area {
+  height: 400px;
+  background: black;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.info-panel {
+  background: white;
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 10px;
+}

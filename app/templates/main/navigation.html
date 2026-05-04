@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/navigation.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="app-layout">
+
+  <aside class="sidebar">
+    <h1>AI TRAFFIC CONTROL</h1>
+    <nav>
+      <a href="/">대시보드</a>
+      <a href="/monitoring">실시간 모니터링</a>
+      <a href="/reports">탐지 레포트</a>
+      <a class="active" href="/navigation">운전 경로 추천</a>
+      <a href="/board">게시판</a>
+      <a href="/settings">설정</a>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+
+    <div class="route-box">
+      <input id="start" placeholder="출발지">
+      <input id="end" placeholder="도착지">
+      <button onclick="searchRoute()">경로 검색</button>
+    </div>
+
+    <div id="map"></div>
+
+  </main>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey={{ kakao_map_js_key }}"></script>
+<script src="{{ url_for('static', filename='js/navigation.js') }}"></script>
+{% endblock %}

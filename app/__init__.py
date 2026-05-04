@@ -1,11 +1,11 @@
 from flask import Flask
+
 from app.config import Config
 from app.extensions import db
 
 # blueprint import
 from app.routes.main_routes import main_bp
 from app.routes.api_routes import api_bp
-from app.routes.map_routes import map_bp
 from app.routes.traffic_api_routes import traffic_api_bp
 
 def create_app():
@@ -18,7 +18,6 @@ def create_app():
     # blueprint 등록
     app.register_blueprint(main_bp)
     app.register_blueprint(api_bp, url_prefix="/api")
-    app.register_blueprint(map_bp)
     app.register_blueprint(traffic_api_bp, url_prefix="/api")
 
     return app

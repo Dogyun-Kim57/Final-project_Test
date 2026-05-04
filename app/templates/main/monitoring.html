@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/monitoring.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="app-layout">
+
+  <aside class="sidebar">
+    <h1>AI TRAFFIC CONTROL</h1>
+    <nav>
+      <a href="/">대시보드</a>
+      <a class="active" href="/monitoring">실시간 모니터링</a>
+      <a href="/reports">탐지 레포트</a>
+      <a href="/navigation">운전 경로 추천</a>
+      <a href="/board">게시판</a>
+      <a href="/settings">설정</a>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+
+    <h2>실시간 CCTV 모니터링</h2>
+
+    <!-- 🔥 지역 선택 -->
+    <div class="monitor-filter">
+      <select id="regionSelect">
+        <option value="seoul">서울권</option>
+        <option value="gyeonggi">경기권</option>
+        <option value="incheon">인천권</option>
+        <option value="capital">수도권 전체</option>
+      </select>
+      <button id="reloadBtn">조회</button>
+    </div>
+
+    <div class="monitor-layout">
+
+      <div id="cctvList" class="cctv-list"></div>
+
+      <div>
+        <div id="videoArea" class="video-area">CCTV 선택</div>
+
+        <div class="info-panel">
+          <p>이름: <span id="name">-</span></p>
+          <p>도로: <span id="road">-</span></p>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/monitoring.js') }}"></script>
+{% endblock %}
