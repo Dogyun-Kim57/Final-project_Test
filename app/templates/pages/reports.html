@@ -1,17 +1,89 @@
 {% extends "base.html" %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/reports.css') }}">
+{% endblock %}
+
 {% block content %}
 
-<h2>탐지 레포트</h2>
+<div class="page-header">
+  <h2>AI 탐지 레포트</h2>
+  <p>YOLOv8 분석 결과와 경로 기반 정체 예측 기록을 확인합니다.</p>
+</div>
 
-<table class="report-table">
-  {% for report in reports %}
-  <tr>
-    <td>{{ report.created_at }}</td>
-    <td>{{ report.start_name }} → {{ report.end_name }}</td>
-    <td>{{ report.risk_level }}</td>
-  </tr>
-  {% endfor %}
-</table>
+<section class="monitor-card">
+  <h3>AI 이상징후 탐지 기록</h3>
+
+  <div class="report-list">
+    {% for report in ai_reports %}
+    <div class="report-item">
+      <div class="report-thumb">
+        {% if report.snapshot_url %}
+        <img src="{{ report.snapshot_url }}" alt="AI 탐지 결과">
+        {% else %}
+        <span>이미지 없음</span>
+        {% endif %}
+      </div>
+
+      <div class="report-info">
+        <div class="report-title-row">
+          <strong>{{ report.event_type }}</strong>
+          <span class="risk-badge risk-{{ report.risk_level }}">{{ report.risk_level }}</span>
+        </div>
+
+        <p>탐지 시간: {{ report.detected_at }}</p>
+        <p>카메라: {{ report.camera_name }} / {{ report.location_name }}</p>
+        <p>객체 요약: {{ report.object_type }}</p>
+        <p>신뢰도: {{ report.confidence }}%</p>
+      </div>
+    </div>
+    {% else %}
+    <p class="empty-text">저장된 AI 탐지 기록이 없습니다.</p>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="monitor-card">
+  <h3>경로 기반 정체 예측 기록</h3>
+
+  <table class="report-table">
+    <thead>
+      <tr>
+        <th>시간</th>
+        <th>경로</th>
+        <th>거리</th>
+        <th>소요시간</th>
+        <th>CCTV</th>
+        <th>위험도</th>
+        <th>점수</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for report in route_reports %}
+      <tr>
+        <td>{{ report.created_at }}</td>
+        <td>
+          <strong>{{ report.start_name }}</strong>
+          →
+          <strong>{{ report.end_name }}</strong>
+          <p>{{ report.comment }}</p>
+        </td>
+        <td>{{ report.distance_text }}</td>
+        <td>{{ report.duration_text }}</td>
+        <td>{{ report.nearby_cctv_count }}개</td>
+        <td>{{ report.risk_level }}</td>
+        <td>{{ report.average_score }}점</td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="7" class="empty-cell">
+          저장된 경로 분석 기록이 없습니다.
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
 
 {% endblock %}

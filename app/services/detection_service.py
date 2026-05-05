@@ -18,3 +18,22 @@ def get_recent_events(limit=5):
         }
         for event in events
     ]
+
+
+def get_ai_detection_reports(limit=50):
+    events = detection_repository.find_recent(limit)
+
+    return [
+        {
+            "id": event.id,
+            "camera_name": event.camera.name if event.camera else "미지정 카메라",
+            "location_name": event.camera.location_name if event.camera else "위치 정보 없음",
+            "event_type": event.event_type,
+            "risk_level": event.risk_level,
+            "object_type": event.object_type or "-",
+            "confidence": round((event.confidence or 0) * 100, 1),
+            "snapshot_url": event.snapshot_url,
+            "detected_at": event.detected_at.strftime("%Y-%m-%d %H:%M:%S"),
+        }
+        for event in events
+    ]

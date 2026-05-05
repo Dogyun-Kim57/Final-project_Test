@@ -54,3 +54,46 @@
 .chart-wide canvas {
   max-height: 260px;
 }
+
+.ai-event-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.ai-event-item {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 16px;
+  padding: 14px;
+  background: #f8fafc;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+}
+
+.ai-event-thumb {
+  height: 110px;
+  background: #020617;
+  color: #cbd5e1;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.ai-event-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ai-event-info strong {
+  font-size: 17px;
+}
+
+.ai-event-info p {
+  margin: 6px 0 0;
+  color: #475569;
+  font-size: 14px;
+}

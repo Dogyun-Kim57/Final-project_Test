@@ -1,12 +1,14 @@
-import { fetchCctvList } from "../services/trafficService.js";
+import { fetchCctvList, fetchAiEvents } from "../services/trafficService.js";
 import { renderCctvList } from "../components/cctvComponent.js";
 import { setText } from "../core/dom.js";
 
 let selectedCctvs = [null, null];
 let activeStates = [false, false];
+let lastAlertEventId = null;
 
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("reloadBtn").addEventListener("click", loadCctv);
+  document.getElementById("reloadAiEventBtn").addEventListener("click", loadAiEvents);
 
   document.getElementById("cam1Toggle").addEventListener("click", () => toggleCamera(0));
   document.getElementById("cam2Toggle").addEventListener("click", () => toggleCamera(1));
@@ -15,6 +17,9 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("cam2ReplayBtn").addEventListener("click", () => showReplay(1));
 
   loadCctv();
+  loadAiEvents();
+
+  setInterval(loadAiEvents, 5000);
 });
 
 async function loadCctv() {
@@ -27,6 +32,106 @@ async function loadCctv() {
 
   const list = document.getElementById("cctvList");
   renderCctvList(list, result.data, selectCctv);
+}
+
+async function loadAiEvents() {
+  const result = await fetchAiEvents();
+  const list = document.getElementById("aiEventList");
+
+  if (!result.success || !result.data || result.data.length === 0) {
+    list.innerHTML = `<p class="empty-text">최근 AI 탐지 로그가 없습니다.</p>`;
+    hideAlertBanner();
+    return;
+  }
+
+  renderAiEvents(result.data);
+  checkLatestAlert(result.data[0]);
+}
+
+function renderAiEvents(events) {
+  const list = document.getElementById("aiEventList");
+  list.innerHTML = "";
+
+  events.forEach(event => {
+    const item = document.createElement("div");
+    item.className = "ai-log-item";
+
+    item.innerHTML = `
+      <div class="ai-log-thumb">
+        ${
+          event.snapshot_url
+            ? `<img src="${event.snapshot_url}" alt="AI 탐지 결과">`
+            : `<span>이미지 없음</span>`
+        }
+      </div>
+
+      <div class="ai-log-info">
+        <div class="ai-log-title">
+          <strong>${event.event_type}</strong>
+          <span class="risk-badge ${getRiskClass(event.risk_level)}">${event.risk_level}</span>
+        </div>
+
+        <p>${event.detected_at}</p>
+        <p>${event.camera_name} / ${event.location_name}</p>
+        <p>객체: ${event.object_type} · 신뢰도: ${event.confidence}%</p>
+      </div>
+    `;
+
+    list.appendChild(item);
+  });
+}
+
+function checkLatestAlert(event) {
+  if (!event) return;
+
+  const shouldAlert = event.risk_level === "긴급" || event.risk_level === "위험";
+
+  if (!shouldAlert) {
+    return;
+  }
+
+  if (lastAlertEventId === event.id) {
+    return;
+  }
+
+  lastAlertEventId = event.id;
+  showAlertBanner(event);
+}
+
+function showAlertBanner(event) {
+  let banner = document.getElementById("aiAlertBanner");
+
+  if (!banner) {
+    banner = document.createElement("div");
+    banner.id = "aiAlertBanner";
+    banner.className = "ai-alert-banner";
+
+    const mainContent = document.querySelector(".main-content");
+    mainContent.prepend(banner);
+  }
+
+  banner.innerHTML = `
+    <div>
+      <strong>AI 이상징후 경보 발생</strong>
+      <p>${event.event_type} · ${event.risk_level} · ${event.detected_at}</p>
+      <p>${event.camera_name} / ${event.location_name}</p>
+    </div>
+    <button id="closeAiAlertBtn" type="button">닫기</button>
+  `;
+
+  banner.classList.remove("hidden");
+
+  document.getElementById("closeAiAlertBtn").addEventListener("click", () => {
+    hideAlertBanner();
+  });
+}
+
+function hideAlertBanner() {
+  const banner = document.getElementById("aiAlertBanner");
+
+  if (banner) {
+    banner.classList.add("hidden");
+  }
 }
 
 function selectCctv(cctv) {
@@ -180,4 +285,11 @@ function resetMonitoring() {
   document.getElementById("cam2Toggle").classList.remove("on");
 
   updatePredictionPanel();
+}
+
+function getRiskClass(riskLevel) {
+  if (riskLevel === "긴급") return "risk-high";
+  if (riskLevel === "위험") return "risk-danger";
+  if (riskLevel === "주의") return "risk-warning";
+  return "risk-low";
 }

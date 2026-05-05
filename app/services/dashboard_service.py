@@ -4,9 +4,6 @@ from app.services.detection_service import get_recent_events
 
 
 def get_dashboard_data():
-    # =========================
-    # 기본 데이터
-    # =========================
     total_cameras = camera_repository.count_all()
     live_cameras = camera_repository.count_live()
     today_events = detection_repository.count_today()
@@ -15,16 +12,12 @@ def get_dashboard_data():
     cameras = get_camera_list()
     recent_events = get_recent_events(limit=5)
 
-    # =========================
-    # 경로 분석 데이터
-    # =========================
     reports = route_report_repository.find_recent(limit=50)
 
     route_total = len(reports)
 
     if route_total > 0:
         avg_score = sum(r.average_score for r in reports) // route_total
-
         high = sum(1 for r in reports if r.risk_level == "높음")
         medium = sum(1 for r in reports if r.risk_level == "주의")
         low = sum(1 for r in reports if r.risk_level == "낮음")
@@ -51,9 +44,6 @@ def get_dashboard_data():
         for r in reports[:5]
     ]
 
-    # =========================
-    # 🔥 차트 데이터 (핵심)
-    # =========================
     charts = {
         "camera_status": {
             "labels": ["운영중", "비활성"],
@@ -87,7 +77,7 @@ def get_dashboard_data():
         },
         "route_summary": route_summary,
         "recent_routes": recent_routes,
-        "cameras": cameras,
         "recent_events": recent_events,
-        "charts": charts,   # 🔥 중요
+        "cameras": cameras,
+        "charts": charts,
     }

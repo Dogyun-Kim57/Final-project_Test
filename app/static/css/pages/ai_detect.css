@@ -1,0 +1,75 @@
+.ai-detect-layout {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.ai-upload-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ai-upload-form input {
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.ai-upload-form button {
+  height: 44px;
+  border: none;
+  border-radius: 10px;
+  background: #2563eb;
+  color: white;
+  font-weight: 800;
+}
+
+.help-text {
+  color: #64748b;
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+.result-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.result-grid div {
+  padding: 14px;
+  background: #f8fafc;
+  border-radius: 12px;
+}
+
+.result-grid span {
+  display: block;
+  color: #64748b;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.result-grid strong {
+  font-size: 18px;
+}
+
+.result-image-box {
+  min-height: 360px;
+  background: #020617;
+  color: #cbd5e1;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.result-image-box img {
+  width: 100%;
+  max-height: 720px;
+  object-fit: contain;
+}

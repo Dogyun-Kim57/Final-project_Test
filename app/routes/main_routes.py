@@ -2,6 +2,8 @@ from flask import Blueprint, render_template, current_app
 
 from app.services.dashboard_service import get_dashboard_data
 from app.services.route_report_service import get_recent_route_reports
+from app.services.detection_service import get_ai_detection_reports
+
 
 
 main_bp = Blueprint("main", __name__)
@@ -14,6 +16,8 @@ main_bp = Blueprint("main", __name__)
 def dashboard():
     data = get_dashboard_data()
     return render_template("pages/dashboard.html", data=data)
+
+
 
 # =========================
 # 🟢 모니터링
@@ -31,8 +35,15 @@ def monitoring():
 # =========================
 @main_bp.route("/reports")
 def reports():
-    reports = get_recent_route_reports(limit=30)
-    return render_template("pages/reports.html", reports=reports)
+    ai_reports = get_ai_detection_reports(limit=50)
+    route_reports = get_recent_route_reports(limit=30)
+
+    return render_template(
+        "pages/reports.html",
+        ai_reports=ai_reports,
+        route_reports=route_reports
+    )
+
 
 # =========================
 # 🟢 경로 탐색
@@ -54,3 +65,10 @@ def settings():
         "pages/settings.html",
         config=current_app.config
     )
+
+# =========================
+# 🟢 AI 탐지
+# =========================
+@main_bp.route("/ai-detect")
+def ai_detect_page():
+    return render_template("pages/ai_detect.html")
