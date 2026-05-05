@@ -1,12 +1,69 @@
 {% extends "base.html" %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/settings.css') }}">
+{% endblock %}
+
 {% block content %}
 
-<h2>설정</h2>
+<div class="page-header">
+  <h2>설정 정보 확인</h2>
+  <p>현재 시스템에 연결된 API, 모델 경로, 탐지 기준값을 확인합니다.</p>
+</div>
 
-<div class="setting-item">
-  <p>모델: {{ config.MODEL_PATH }}</p>
-  <p>임계값: {{ config.DETECTION_THRESHOLD }}</p>
+<div class="monitor-card">
+  <h3>AI 모델 정보</h3>
+
+  <div class="setting-item">
+    <span>모델 경로</span>
+    <strong>{{ config.MODEL_PATH }}</strong>
+  </div>
+
+  <div class="setting-item">
+    <span>YOLO 모델 경로</span>
+    <strong>{{ config.YOLO_MODEL_PATH }}</strong>
+  </div>
+
+  <div class="setting-item">
+    <span>탐지 임계값</span>
+    <strong>{{ config.DETECTION_THRESHOLD }}</strong>
+  </div>
+</div>
+
+<div class="monitor-card">
+  <h3>외부 API 연결 정보</h3>
+
+  <div class="setting-grid">
+    <div class="setting-item">
+      <span>Kakao Map JS Key</span>
+      <strong>{{ "연결됨" if config.KAKAO_MAP_JS_KEY else "미설정" }}</strong>
+    </div>
+
+    <div class="setting-item">
+      <span>Kakao REST API Key</span>
+      <strong>{{ "연결됨" if config.KAKAO_REST_API_KEY else "미설정" }}</strong>
+    </div>
+
+    <div class="setting-item">
+      <span>Google Maps API Key</span>
+      <strong>{{ "연결됨" if config.GOOGLE_MAPS_API_KEY else "미설정" }}</strong>
+    </div>
+
+    <div class="setting-item">
+      <span>ITS CCTV API Key</span>
+      <strong>{{ "연결됨" if config.ITS_API_KEY else "미설정" }}</strong>
+    </div>
+
+    <div class="setting-item">
+      <span>LLM API Key</span>
+      <strong>{{ "연결됨" if config.LLM_API_KEY else "미설정" }}</strong>
+    </div>
+
+    <div class="setting-item">
+      <span>API 상태</span>
+      <strong>{{ config.API_STATUS }}</strong>
+    </div>
+  </div>
 </div>
 
 {% endblock %}

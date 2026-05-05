@@ -1,4 +1,18 @@
-.dashboard-chart-grid {
+.page-header {
+  margin-bottom: 18px;
+}
+
+.page-header h2 {
+  margin: 0 0 6px;
+  font-size: 26px;
+}
+
+.page-header p {
+  margin: 0;
+  color: #64748b;
+}
+
+.dashboard-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 18px;
@@ -6,13 +20,37 @@
 }
 
 .chart-card {
-  min-height: 320px;
+  min-height: 280px;
 }
 
-.chart-card canvas {
-  max-height: 260px;
+.chart-card h3 {
+  margin-bottom: 12px;
+}
+
+.chart-box {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chart-small {
+  height: 220px;
+}
+
+.chart-small canvas {
+  max-width: 220px;
+  max-height: 220px;
+}
+
+.chart-bar {
+  height: 280px;
 }
 
 .chart-wide {
   grid-column: 1 / -1;
+}
+
+.chart-wide canvas {
+  max-height: 260px;
 }

@@ -6,28 +6,128 @@
 
 {% block content %}
 
-<h2>실시간 CCTV 모니터링</h2>
-
-<div class="monitor-filter">
-  <select id="regionSelect">
-    <option value="seoul">서울</option>
-    <option value="gyeonggi">경기</option>
-  </select>
-  <button id="reloadBtn">조회</button>
+<div class="page-header">
+  <h2>실시간 교통 관제 모니터링</h2>
+  <p>지역·도로 유형별 CCTV를 선택하고, 최대 2대의 CCTV를 동시에 관제합니다.</p>
 </div>
 
-<div class="monitor-layout">
-  <div id="cctvList"></div>
-
-  <div>
-    <div id="videoArea">CCTV 선택</div>
-
-    <div>
-      <p>이름: <span id="name"></span></p>
-      <p>도로: <span id="road"></span></p>
-    </div>
+<section class="monitor-toolbar">
+  <div class="filter-group">
+    <label>지역</label>
+    <select id="regionSelect">
+      <option value="seoul">서울</option>
+      <option value="gyeonggi">경기</option>
+      <option value="daejeon">대전</option>
+      <option value="gangwon">강원</option>
+      <option value="daegu">대구</option>
+      <option value="gwangju">광주</option>
+      <option value="busan">부산</option>
+    </select>
   </div>
-</div>
+
+  <div class="filter-group">
+    <label>도로 유형</label>
+    <select id="roadTypeSelect">
+      <option value="highway">일반 고속도로</option>
+      <option value="tunnel">터널 구간</option>
+    </select>
+  </div>
+
+  <button id="reloadBtn" type="button">CCTV 조회</button>
+</section>
+
+<section class="monitoring-grid">
+
+  <aside class="cctv-panel">
+    <div class="panel-header">
+      <div>
+        <h3>CCTV 목록</h3>
+        <p>관제할 CCTV를 선택하세요.</p>
+      </div>
+      <span>최대 2대</span>
+    </div>
+
+    <div id="cctvList" class="cctv-list">
+      <p class="empty-text">CCTV 목록을 불러오는 중입니다.</p>
+    </div>
+  </aside>
+
+  <section class="control-panel">
+
+    <div class="dual-video-grid">
+
+      <div class="video-card">
+        <div class="video-header">
+          <div>
+            <h3 id="cam1Name">관제 CCTV 1</h3>
+            <p id="cam1Road">CCTV를 선택하세요.</p>
+          </div>
+          <button id="cam1Toggle" class="control-btn" type="button">OFF</button>
+        </div>
+
+        <div id="cam1Video" class="video-area">
+          CCTV 선택
+        </div>
+
+        <div class="video-actions">
+          <button id="cam1ReplayBtn" type="button">최근 30초 저장 화면</button>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <div class="video-header">
+          <div>
+            <h3 id="cam2Name">관제 CCTV 2</h3>
+            <p id="cam2Road">CCTV를 선택하세요.</p>
+          </div>
+          <button id="cam2Toggle" class="control-btn" type="button">OFF</button>
+        </div>
+
+        <div id="cam2Video" class="video-area">
+          CCTV 선택
+        </div>
+
+        <div class="video-actions">
+          <button id="cam2ReplayBtn" type="button">최근 30초 저장 화면</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="monitor-card">
+      <h3>정체 가능성 예측 정보</h3>
+
+      <div class="status-grid">
+        <div>
+          <span>선택 CCTV</span>
+          <strong id="selectedCount">0 / 2</strong>
+        </div>
+
+        <div>
+          <span>평균 속도</span>
+          <strong id="avgSpeed">-</strong>
+        </div>
+
+        <div>
+          <span>차량 수</span>
+          <strong id="vehicleCount">-</strong>
+        </div>
+
+        <div>
+          <span>정체 가능성</span>
+          <strong id="congestionRisk">-</strong>
+        </div>
+      </div>
+
+      <div class="comment-box">
+        <span>관제 코멘트</span>
+        <p id="monitorComment">CCTV를 선택하면 정체 가능성 예측 정보가 표시됩니다.</p>
+      </div>
+    </div>
+
+  </section>
+
+</section>
 
 {% endblock %}
 

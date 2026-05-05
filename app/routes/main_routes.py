@@ -13,12 +13,7 @@ main_bp = Blueprint("main", __name__)
 @main_bp.route("/")
 def dashboard():
     data = get_dashboard_data()
-
-    return render_template(
-        "pages/dashboard.html",   # 🔥 여기 수정됨
-        data=data
-    )
-
+    return render_template("pages/dashboard.html", data=data)
 
 # =========================
 # 🟢 모니터링
@@ -26,7 +21,7 @@ def dashboard():
 @main_bp.route("/monitoring")
 def monitoring():
     return render_template(
-        "pages/monitoring.html",   # 🔥 수정
+        "pages/monitoring.html",
         kakao_map_js_key=current_app.config.get("KAKAO_MAP_JS_KEY")
     )
 
@@ -37,12 +32,7 @@ def monitoring():
 @main_bp.route("/reports")
 def reports():
     reports = get_recent_route_reports(limit=30)
-
-    return render_template(
-        "pages/reports.html",   # 🔥 수정
-        reports=reports
-    )
-
+    return render_template("pages/reports.html", reports=reports)
 
 # =========================
 # 🟢 경로 탐색
@@ -50,21 +40,10 @@ def reports():
 @main_bp.route("/navigation")
 def navigation():
     return render_template(
-        "pages/navigation.html",   # 🔥 수정
+        "pages/navigation.html",
         kakao_map_js_key=current_app.config.get("KAKAO_MAP_JS_KEY"),
         google_maps_api_key=current_app.config.get("GOOGLE_MAPS_API_KEY")
     )
-
-
-# =========================
-# 🟢 게시판
-# =========================
-@main_bp.route("/board")
-def board():
-    return render_template(
-        "pages/board.html"   # 🔥 수정
-    )
-
 
 # =========================
 # 🟢 설정
@@ -72,6 +51,6 @@ def board():
 @main_bp.route("/settings")
 def settings():
     return render_template(
-        "pages/settings.html",   # 🔥 수정
+        "pages/settings.html",
         config=current_app.config
     )

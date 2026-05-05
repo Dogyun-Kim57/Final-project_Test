@@ -1,36 +1,195 @@
-.monitor-filter {
-  margin: 12px 0 18px;
+.monitor-toolbar {
   display: flex;
-  gap: 10px;
+  align-items: end;
+  gap: 12px;
+  background: white;
+  padding: 16px;
+  border-radius: 14px;
+  margin-bottom: 18px;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
 }
 
-.monitor-layout {
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filter-group label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #475569;
+}
+
+.filter-group select {
+  width: 180px;
+  padding: 11px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+}
+
+#reloadBtn {
+  height: 42px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 10px;
+  background: #2563eb;
+  color: white;
+  font-weight: 800;
+}
+
+.monitoring-grid {
   display: grid;
-  grid-template-columns: 320px 1fr;
+  grid-template-columns: 340px 1fr;
   gap: 18px;
 }
 
-.cctv-list {
+.cctv-panel,
+.video-card {
   background: white;
-  padding: 10px;
-  border-radius: 12px;
-  max-height: 600px;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+}
+
+.panel-header,
+.video-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.panel-header h3,
+.video-header h3 {
+  margin: 0;
+}
+
+.panel-header p,
+.video-header p {
+  margin: 6px 0 0;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.panel-header span {
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.cctv-list {
+  max-height: 720px;
   overflow-y: auto;
 }
 
 .cctv-item {
-  padding: 10px;
-  margin-bottom: 8px;
-  background: #f1f5f9;
+  padding: 14px;
+  margin-bottom: 10px;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
   cursor: pointer;
-  border-radius: 8px;
+  transition: 0.15s ease;
+}
+
+.cctv-item:hover {
+  background: #eff6ff;
+  border-color: #93c5fd;
+  transform: translateY(-1px);
+}
+
+.control-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.dual-video-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
 }
 
 .video-area {
-  height: 400px;
-  background: black;
-  color: white;
+  height: 360px;
+  background: #020617;
+  color: #cbd5e1;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+}
+
+.video-area video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.control-btn {
+  padding: 7px 12px;
+  border: none;
+  border-radius: 999px;
+  background: #e5e7eb;
+  color: #475569;
+  font-weight: 900;
+}
+
+.control-btn.on {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.video-actions {
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.video-actions button {
+  border: none;
+  padding: 9px 12px;
+  border-radius: 10px;
+  background: #0f172a;
+  color: white;
+  font-weight: 700;
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.status-grid div {
+  padding: 14px;
+  background: #f8fafc;
+  border-radius: 12px;
+}
+
+.status-grid span {
+  display: block;
+  color: #64748b;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.status-grid strong {
+  font-size: 18px;
+}
+
+.replay-box {
+  text-align: center;
+  line-height: 1.7;
+}
+
+.empty-text {
+  color: #64748b;
+  font-size: 14px;
 }
