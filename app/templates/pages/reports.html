@@ -6,84 +6,159 @@
 
 {% block content %}
 
-<div class="page-header">
-  <h2>AI 탐지 레포트</h2>
-  <p>YOLOv8 분석 결과와 경로 기반 정체 예측 기록을 확인합니다.</p>
+<div class="report-hero">
+  <div>
+    <span class="eyebrow">AI DETECTION REPORT</span>
+    <h2>탐지 레포트</h2>
+    <p>
+      실시간 CCTV 이상징후와 AI 영상 분석 기록을 기준별로 분류하여 확인합니다.
+      위험 또는 긴급으로 판단된 이벤트만 레포트에 기록됩니다.
+    </p>
+  </div>
+
+  <div class="report-summary-grid">
+    <div>
+      <span>전체 기록</span>
+      <strong>{{ detection_groups.summary.total_count }}</strong>
+    </div>
+    <div>
+      <span>실시간 오늘</span>
+      <strong>{{ detection_groups.summary.realtime_today_count }}</strong>
+    </div>
+    <div>
+      <span>업로드 오늘</span>
+      <strong>{{ detection_groups.summary.upload_today_count }}</strong>
+    </div>
+  </div>
 </div>
 
-<section class="monitor-card">
-  <h3>AI 이상징후 탐지 기록</h3>
+<section class="report-section realtime-section">
+  <div class="section-header">
+    <div>
+      <span class="section-label">REALTIME CCTV</span>
+      <h3>실시간 이상징후 탐지 기록</h3>
+      <p>실시간 CCTV 분석 중 위험 또는 긴급으로 판단된 이벤트입니다.</p>
+    </div>
+    <strong class="section-count">{{ detection_groups.realtime_today.total_count }}건</strong>
+  </div>
 
   <div class="report-list">
-    {% for report in ai_reports %}
-    <div class="report-item">
-      <div class="report-thumb">
-        {% if report.snapshot_url %}
-        <img src="{{ report.snapshot_url }}" alt="AI 탐지 결과">
-        {% else %}
-        <span>이미지 없음</span>
-        {% endif %}
-      </div>
-
-      <div class="report-info">
-        <div class="report-title-row">
-          <strong>{{ report.event_type }}</strong>
-          <span class="risk-badge risk-{{ report.risk_level }}">{{ report.risk_level }}</span>
-        </div>
-
-        <p>탐지 시간: {{ report.detected_at }}</p>
-        <p>카메라: {{ report.camera_name }} / {{ report.location_name }}</p>
-        <p>객체 요약: {{ report.object_type }}</p>
-        <p>신뢰도: {{ report.confidence }}%</p>
-      </div>
-    </div>
+    {% for report in detection_groups.realtime_today["items"] %}
+      {% include "pages/report_item.html" %}
     {% else %}
-    <p class="empty-text">저장된 AI 탐지 기록이 없습니다.</p>
+      <div class="empty-panel">
+        <strong>오늘 기록된 실시간 이상징후가 없습니다.</strong>
+        <p>모니터링 화면에서 AI 분석 ON 후 위험 기준 이상 이벤트가 감지되면 이곳에 표시됩니다.</p>
+      </div>
     {% endfor %}
   </div>
+
+  {% set page_obj = detection_groups.realtime_today %}
+  {% set page_param = "rt_page" %}
+  {% include "pages/report_pagination.html" %}
 </section>
 
-<section class="monitor-card">
-  <h3>경로 기반 정체 예측 기록</h3>
+<section class="report-section upload-section">
+  <div class="section-header">
+    <div>
+      <span class="section-label">AI UPLOAD ANALYSIS</span>
+      <h3>AI 영상 분석 업로드 기록</h3>
+      <p>/ai-detect 화면에서 이미지 업로드로 분석된 위험 또는 긴급 이벤트입니다.</p>
+    </div>
+    <strong class="section-count">{{ detection_groups.upload_today.total_count }}건</strong>
+  </div>
 
-  <table class="report-table">
-    <thead>
-      <tr>
-        <th>시간</th>
-        <th>경로</th>
-        <th>거리</th>
-        <th>소요시간</th>
-        <th>CCTV</th>
-        <th>위험도</th>
-        <th>점수</th>
-      </tr>
-    </thead>
+  <div class="report-list">
+    {% for report in detection_groups.upload_today["items"] %}
+      {% include "pages/report_item.html" %}
+    {% else %}
+      <div class="empty-panel">
+        <strong>오늘 업로드 분석 기록이 없습니다.</strong>
+        <p>AI 영상 분석 화면에서 이미지를 업로드하면 이곳에 분석 결과가 쌓입니다.</p>
+      </div>
+    {% endfor %}
+  </div>
 
-    <tbody>
-      {% for report in route_reports %}
-      <tr>
-        <td>{{ report.created_at }}</td>
-        <td>
-          <strong>{{ report.start_name }}</strong>
-          →
-          <strong>{{ report.end_name }}</strong>
-          <p>{{ report.comment }}</p>
-        </td>
-        <td>{{ report.distance_text }}</td>
-        <td>{{ report.duration_text }}</td>
-        <td>{{ report.nearby_cctv_count }}개</td>
-        <td>{{ report.risk_level }}</td>
-        <td>{{ report.average_score }}점</td>
-      </tr>
-      {% else %}
-      <tr>
-        <td colspan="7" class="empty-cell">
-          저장된 경로 분석 기록이 없습니다.
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  {% set page_obj = detection_groups.upload_today %}
+  {% set page_param = "up_page" %}
+  {% include "pages/report_pagination.html" %}
+</section>
+
+<section class="report-section previous-section">
+  <div class="section-header">
+    <div>
+      <span class="section-label">ARCHIVE</span>
+      <h3>이전 탐지 기록</h3>
+      <p>오늘 이전에 저장된 실시간 이상징후 및 업로드 분석 기록입니다.</p>
+    </div>
+    <strong class="section-count">{{ detection_groups.previous_records.total_count }}건</strong>
+  </div>
+
+  <div class="report-list compact">
+    {% for report in detection_groups.previous_records["items"] %}
+      {% include "pages/report_item.html" %}
+    {% else %}
+      <div class="empty-panel">
+        <strong>이전 기록이 없습니다.</strong>
+        <p>탐지 기록이 누적되면 이 영역에서 날짜가 지난 기록을 확인할 수 있습니다.</p>
+      </div>
+    {% endfor %}
+  </div>
+
+  {% set page_obj = detection_groups.previous_records %}
+  {% set page_param = "prev_page" %}
+  {% include "pages/report_pagination.html" %}
+</section>
+
+<section class="report-section route-section">
+  <div class="section-header">
+    <div>
+      <span class="section-label">ROUTE ANALYSIS</span>
+      <h3>경로 기반 정체 예측 기록</h3>
+      <p>운전 경로 추천 기능에서 생성된 경로 주변 CCTV 기반 정체 분석 결과입니다.</p>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table class="report-table">
+      <thead>
+        <tr>
+          <th>시간</th>
+          <th>경로</th>
+          <th>거리</th>
+          <th>소요시간</th>
+          <th>CCTV</th>
+          <th>위험도</th>
+          <th>점수</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for report in route_reports %}
+        <tr>
+          <td>{{ report.created_at }}</td>
+          <td>
+            <strong>{{ report.start_name }}</strong>
+            →
+            <strong>{{ report.end_name }}</strong>
+            <p>{{ report.comment }}</p>
+          </td>
+          <td>{{ report.distance_text }}</td>
+          <td>{{ report.duration_text }}</td>
+          <td>{{ report.nearby_cctv_count }}개</td>
+          <td>{{ report.risk_level }}</td>
+          <td>{{ report.average_score }}점</td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="7" class="empty-cell">
+            저장된 경로 분석 기록이 없습니다.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </section>
 
 {% endblock %}

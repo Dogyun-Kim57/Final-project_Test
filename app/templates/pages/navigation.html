@@ -8,18 +8,20 @@
 
 <div class="page-header">
   <h2>운전 경로 추천</h2>
-  <p>출발지와 도착지를 선택하면 실제 도로 경로와 주변 CCTV 위험도를 분석합니다.</p>
+  <p>카카오 장소 검색을 통해 출발지와 도착지를 선택하고, 경로 주변 CCTV 위험도를 분석합니다.</p>
 </div>
 
 <section class="route-search-card">
   <div class="route-input-group">
     <label>출발지</label>
     <input id="startInput" type="text" placeholder="예: 서울역">
+    <div id="startResultList" class="place-result-list"></div>
   </div>
 
   <div class="route-input-group">
     <label>도착지</label>
     <input id="endInput" type="text" placeholder="예: 강남역">
+    <div id="endResultList" class="place-result-list"></div>
   </div>
 
   <button id="searchRouteBtn" type="button">경로 검색</button>
@@ -67,7 +69,7 @@
 
     <div class="comment-box">
       <span>분석 코멘트</span>
-      <p id="routeComment">출발지와 도착지를 선택한 뒤 경로를 검색하세요.</p>
+      <p id="routeComment">출발지와 도착지를 검색한 뒤 장소를 선택하세요.</p>
     </div>
   </aside>
 </section>
@@ -76,19 +78,5 @@
 
 {% block extra_js %}
 <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey={{ kakao_map_js_key }}&libraries=services"></script>
-
-<script>
-window.__googleMapsReady = false;
-window.initGoogleAutocomplete = function () {
-  window.__googleMapsReady = true;
-  window.dispatchEvent(new Event("google-maps-ready"));
-};
-</script>
-
 <script type="module" src="{{ url_for('static', filename='js/pages/navigation.js') }}"></script>
-
-<script
-  src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&loading=async&libraries=places&callback=initGoogleAutocomplete"
-  async defer>
-</script>
 {% endblock %}

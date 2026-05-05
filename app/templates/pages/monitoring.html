@@ -8,7 +8,7 @@
 
 <div class="page-header">
   <h2>실시간 교통 관제 모니터링</h2>
-  <p>지역·도로 유형별 CCTV를 선택하고, AI 이상징후 로그와 함께 관제합니다.</p>
+  <p>지역·도로 유형별 CCTV를 선택하고, YOLOv8 AI 분석을 관제 화면에서 바로 실행합니다.</p>
 </div>
 
 <section class="monitor-toolbar">
@@ -56,13 +56,18 @@
 
     <div class="dual-video-grid">
 
+      <!-- 1번 CCTV 카드 -->
       <div class="video-card">
         <div class="video-header">
           <div>
             <h3 id="cam1Name">관제 CCTV 1</h3>
             <p id="cam1Road">CCTV를 선택하세요.</p>
           </div>
-          <button id="cam1Toggle" class="control-btn" type="button">OFF</button>
+
+          <div class="video-header-actions">
+            <button id="cam1AiBtn" class="ai-control-btn" type="button">AI 분석 OFF</button>
+            <button id="cam1Toggle" class="control-btn" type="button">OFF</button>
+          </div>
         </div>
 
         <div id="cam1Video" class="video-area">
@@ -74,13 +79,18 @@
         </div>
       </div>
 
+      <!-- 2번 CCTV 카드 -->
       <div class="video-card">
         <div class="video-header">
           <div>
             <h3 id="cam2Name">관제 CCTV 2</h3>
             <p id="cam2Road">CCTV를 선택하세요.</p>
           </div>
-          <button id="cam2Toggle" class="control-btn" type="button">OFF</button>
+
+          <div class="video-header-actions">
+            <button id="cam2AiBtn" class="ai-control-btn" type="button">AI 분석 OFF</button>
+            <button id="cam2Toggle" class="control-btn" type="button">OFF</button>
+          </div>
         </div>
 
         <div id="cam2Video" class="video-area">
@@ -146,5 +156,6 @@
 {% endblock %}
 
 {% block extra_js %}
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 <script type="module" src="{{ url_for('static', filename='js/pages/monitoring.js') }}"></script>
 {% endblock %}

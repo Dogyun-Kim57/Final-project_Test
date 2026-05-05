@@ -1,0 +1,17 @@
+{% if page_obj.total_pages > 1 %}
+<div class="pagination">
+  {% if page_obj.has_prev %}
+    <a href="{{ url_for('main.reports', **{page_param: page_obj.prev_page}) }}">이전</a>
+  {% else %}
+    <span class="disabled">이전</span>
+  {% endif %}
+
+  <strong>{{ page_obj.page }} / {{ page_obj.total_pages }}</strong>
+
+  {% if page_obj.has_next %}
+    <a href="{{ url_for('main.reports', **{page_param: page_obj.next_page}) }}">다음</a>
+  {% else %}
+    <span class="disabled">다음</span>
+  {% endif %}
+</div>
+{% endif %}

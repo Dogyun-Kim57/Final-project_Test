@@ -1,0 +1,42 @@
+<div class="report-item">
+  <div class="report-thumb">
+    {% if report.snapshot_url %}
+    <img src="{{ report.snapshot_url }}" alt="AI 탐지 결과">
+    {% else %}
+    <span>이미지 없음</span>
+    {% endif %}
+  </div>
+
+  <div class="report-info">
+    <div class="report-title-row">
+      <div>
+        <strong>{{ report.event_type }}</strong>
+        <p>{{ report.detected_at }}</p>
+      </div>
+
+      <span class="risk-badge risk-{{ report.risk_level }}">{{ report.risk_level }}</span>
+    </div>
+
+    <div class="report-meta-grid">
+      <div>
+        <span>카메라</span>
+        <strong>{{ report.camera_name }}</strong>
+      </div>
+
+      <div>
+        <span>위치</span>
+        <strong>{{ report.location_name }}</strong>
+      </div>
+
+      <div>
+        <span>객체 요약</span>
+        <strong>{{ report.object_type }}</strong>
+      </div>
+
+      <div>
+        <span>신뢰도</span>
+        <strong>{{ report.confidence }}%</strong>
+      </div>
+    </div>
+  </div>
+</div>

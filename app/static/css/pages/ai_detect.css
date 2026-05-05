@@ -73,3 +73,68 @@
   max-height: 720px;
   object-fit: contain;
 }
+
+/* ========================= */
+/* YOLO 실시간 스트리밍 영역 */
+/* ========================= */
+
+.stream-control-box {
+  display: grid;
+  grid-template-columns: 1fr 140px 140px;
+  gap: 12px;
+  align-items: end;
+  margin-bottom: 10px;
+}
+
+.stream-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stream-input-group label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #475569;
+}
+
+.stream-input-group input {
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+}
+
+#startStreamBtn,
+#stopStreamBtn {
+  height: 44px;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: 800;
+}
+
+#startStreamBtn {
+  background: #2563eb;
+}
+
+#stopStreamBtn {
+  background: #0f172a;
+}
+
+.stream-box {
+  min-height: 460px;
+  background: #020617;
+  color: #cbd5e1;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.stream-box img {
+  width: 100%;
+  max-height: 720px;
+  object-fit: contain;
+}

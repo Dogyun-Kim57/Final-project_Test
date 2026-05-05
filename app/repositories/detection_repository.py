@@ -5,10 +5,6 @@ from app.extensions import db
 from app.models.detection_event import DetectionEvent
 
 
-# =========================
-# 기본 카운트
-# =========================
-
 def count_all():
     return db.session.query(func.count(DetectionEvent.id)).scalar() or 0
 
@@ -37,9 +33,19 @@ def find_recent(limit=10):
     )
 
 
-# =========================
-# 차트용
-# =========================
+def find_recent_by_risk_levels(risk_levels, limit=50):
+    """
+    특정 위험도만 최근순으로 조회.
+    실시간 이상징후 레포트에서는 '위험', '긴급'만 보여주기 위해 사용.
+    """
+    return (
+        DetectionEvent.query
+        .filter(DetectionEvent.risk_level.in_(risk_levels))
+        .order_by(DetectionEvent.detected_at.desc())
+        .limit(limit)
+        .all()
+    )
+
 
 def get_level_counts():
     result = (
