@@ -10,7 +10,7 @@ from app.routes.traffic_api_routes import traffic_api_bp
 from app.routes.route_api_routes import route_api_bp
 from app.routes.ai_detection_routes import ai_detection_bp
 from app.routes.post_routes import post_bp
-
+from app.routes.assistant_routes import assistant_bp
 
 def create_app():
     app = Flask(
@@ -37,5 +37,9 @@ def create_app():
 
     # 게시판 라우트
     app.register_blueprint(post_bp)
+
+    # API: /api/assistant/chat
+    app.register_blueprint(assistant_bp)
+
 
     return app

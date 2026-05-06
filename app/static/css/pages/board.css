@@ -1,18 +1,245 @@
+.board-page-header {
+  margin-bottom: 18px;
+}
+
+.board-layout {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.board-form-card,
+.board-list-card,
+.ai-analysis-result-card {
+  background: white;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  border: 1px solid #e5e7eb;
+}
+
+.card-title-row,
+.result-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+.mini-label {
+  display: inline-block;
+  margin-bottom: 6px;
+  color: #2563eb;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.board-form-card h3,
+.board-list-card h3,
+.ai-analysis-result-card h3 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.board-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 .board-form input,
 .board-form textarea {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   border: 1px solid #d1d5db;
-  border-radius: 8px;
-  margin-bottom: 10px;
+  border-radius: 12px;
+  background: #f8fafc;
 }
 
 .board-form textarea {
-  height: 120px;
+  height: 140px;
+  resize: vertical;
+}
+
+.board-form button {
+  height: 44px;
+  border: none;
+  border-radius: 12px;
+  background: #2563eb;
+  color: white;
+  font-weight: 900;
+}
+
+.board-help {
+  margin: 12px 0 0;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.6;
 }
 
 .post-item {
-  margin-bottom: 20px;
-  border-bottom: 1px solid #e5e7eb;
-  padding-bottom: 10px;
+  padding: 16px;
+  margin-bottom: 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  background: #f8fafc;
+  transition: 0.15s ease;
+}
+
+.post-item:hover {
+  border-color: #bfdbfe;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.post-header h4 {
+  margin: 0 0 6px;
+  font-size: 18px;
+  color: #0f172a;
+}
+
+.post-header p {
+  margin: 0;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.post-header span {
+  flex-shrink: 0;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.file-list {
+  display: grid;
+  gap: 10px;
+}
+
+.file-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  padding: 12px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+}
+
+.file-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.file-icon {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: #eff6ff;
+  font-size: 22px;
+}
+
+.file-item strong {
+  display: block;
+  font-size: 14px;
+  color: #111827;
+}
+
+.file-item p {
+  margin: 4px 0 0;
+  color: #64748b;
+  font-size: 12px;
+  word-break: break-all;
+}
+
+.file-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.ai-file-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 9px 12px;
+  color: white;
+  font-weight: 900;
+  font-size: 12px;
+}
+
+.pdf-btn {
+  background: #1e3a8a;
+}
+
+.image-btn {
+  background: #0f766e;
+}
+
+.ai-file-btn:hover {
+  filter: brightness(0.92);
+}
+
+.ai-file-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.empty-board {
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px dashed #cbd5e1;
+  background: #f8fafc;
+  color: #64748b;
+}
+
+.empty-board strong {
+  display: block;
+  color: #334155;
+  margin-bottom: 6px;
+}
+
+.result-header h3 {
+  margin: 0 0 6px;
+}
+
+.result-header p {
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+#clearAnalysisBtn {
+  border: none;
+  border-radius: 10px;
+  padding: 9px 12px;
+  background: #e5e7eb;
+  color: #475569;
+  font-weight: 800;
+}
+
+.ai-analysis-result {
+  min-height: 260px;
+  padding: 22px;
+  border-radius: 16px;
+  background: #0f172a;
+  color: #e5e7eb;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  font-size: 14px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
 }

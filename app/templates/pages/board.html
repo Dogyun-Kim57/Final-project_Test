@@ -1,21 +1,161 @@
 {% extends "base.html" %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/board.css') }}">
+{% endblock %}
+
 {% block content %}
 
-<h2>게시판</h2>
-
-<form action="/board/create" method="post" enctype="multipart/form-data" class="board-form">
-  <input name="title" placeholder="제목">
-  <textarea name="content"></textarea>
-  <input type="file" name="files" multiple>
-  <button>등록</button>
-</form>
-
-{% for post in posts %}
-<div class="post-item">
-  <h3>{{ post.title }}</h3>
-  <p>{{ post.content }}</p>
+<div class="page-header board-page-header">
+  <h2>AI 관제 자료 분석 시스템</h2>
+  <p>
+    교통/관제 관련 PDF 문서와 이미지를 업로드하여
+    AI 기반 문서 요약 및 상황 분석 기능을 실행할 수 있습니다.
+  </p>
 </div>
-{% endfor %}
 
+<section class="board-layout">
+
+  <div class="board-form-card">
+    <div class="card-title-row">
+      <div>
+        <span class="mini-label">UPLOAD</span>
+        <h3>자료 업로드</h3>
+      </div>
+    </div>
+
+    <form action="/board/create" method="post" enctype="multipart/form-data" class="board-form">
+      <input name="title" placeholder="제목" required>
+      <textarea name="content" placeholder="자료 설명 또는 메모를 입력하세요." required></textarea>
+      <input type="file" name="files" multiple>
+      <button type="submit">등록</button>
+    </form>
+
+    <p class="board-help">
+      PDF는 문서 요약, 이미지는 교통 상황 설명 AI에 활용할 수 있습니다.
+    </p>
+  </div>
+
+  <div class="board-list-card">
+    <div class="card-title-row">
+      <div>
+        <span class="mini-label">ANALYSIS QUEUE</span>
+        <h3>AI 분석 대기 자료</h3>
+      </div>
+    </div>
+
+    {% for post in posts %}
+    <article class="post-item">
+      <div class="post-header">
+        <div>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.content }}</p>
+        </div>
+        <span>{{ post.created_at.strftime("%Y-%m-%d %H:%M") }}</span>
+      </div>
+
+      {% if post.files %}
+      <div class="file-list">
+        {% for file in post.files %}
+          {% set lower_name = (file.filename ~ " " ~ file.file_path)|lower|trim %}
+
+          <div class="file-item">
+            <div class="file-main">
+              <div class="file-icon">
+                {% if ".pdf" in lower_name or "pdf" in lower_name %}
+                  📄
+                {% elif ".jpg" in lower_name or ".jpeg" in lower_name or ".png" in lower_name or ".webp" in lower_name or "image" in lower_name %}
+                  🖼️
+                {% else %}
+                  📎
+                {% endif %}
+              </div>
+
+              <div>
+                <strong>{{ file.filename }}</strong>
+                <p>{{ file.file_path }}</p>
+              </div>
+            </div>
+
+            <div class="file-actions">
+              {% if ".pdf" in lower_name or "pdf" in lower_name %}
+                <button
+                  class="ai-file-btn pdf-btn"
+                  type="button"
+                  data-post-id="{{ post.id }}"
+                  data-file-id="{{ file.id }}"
+                  data-analysis-type="pdf"
+                >
+                  PDF AI 요약
+                </button>
+              {% endif %}
+
+              {% if ".jpg" in lower_name or ".jpeg" in lower_name or ".png" in lower_name or ".webp" in lower_name or "image" in lower_name %}
+                <button
+                  class="ai-file-btn image-btn"
+                  type="button"
+                  data-post-id="{{ post.id }}"
+                  data-file-id="{{ file.id }}"
+                  data-analysis-type="image"
+                >
+                  이미지 AI 설명
+                </button>
+              {% endif %}
+
+              {% if not (".pdf" in lower_name or "pdf" in lower_name or ".jpg" in lower_name or ".jpeg" in lower_name or ".png" in lower_name or ".webp" in lower_name or "image" in lower_name) %}
+                <button
+                  class="ai-file-btn pdf-btn"
+                  type="button"
+                  data-post-id="{{ post.id }}"
+                  data-file-id="{{ file.id }}"
+                  data-analysis-type="pdf"
+                >
+                  PDF로 분석
+                </button>
+
+                <button
+                  class="ai-file-btn image-btn"
+                  type="button"
+                  data-post-id="{{ post.id }}"
+                  data-file-id="{{ file.id }}"
+                  data-analysis-type="image"
+                >
+                  이미지로 분석
+                </button>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </article>
+    {% else %}
+      <div class="empty-board">
+        <strong>아직 업로드된 자료가 없습니다.</strong>
+        <p>PDF 문서나 교통 이미지를 업로드해 AI 분석을 실행해보세요.</p>
+      </div>
+    {% endfor %}
+  </div>
+
+</section>
+
+<section class="ai-analysis-result-card">
+  <div class="result-header">
+    <div>
+      <span class="mini-label">AI RESULT</span>
+      <h3>실시간 AI 분석 결과</h3>
+      <p>PDF 요약 또는 이미지 설명 결과가 이곳에 표시됩니다.</p>
+    </div>
+    <button id="clearAnalysisBtn" type="button">초기화</button>
+  </div>
+
+  <div id="aiAnalysisResult" class="ai-analysis-result">
+    아직 실행된 AI 분석이 없습니다.
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script type="module" src="{{ url_for('static', filename='js/pages/board.js') }}"></script>
 {% endblock %}

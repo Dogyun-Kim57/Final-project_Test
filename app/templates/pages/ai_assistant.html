@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/ai_assistant.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <h2>LangChain · RAG · LangGraph 관제 AI</h2>
+  <p>
+    기본 Chain, PDF Retriever 기반 RAG, 인터넷 검색 Chain, LangGraph 라우터를 활용한
+    AI 교통 관제 보조 시스템입니다.
+  </p>
+</div>
+
+<section class="assistant-layout">
+  <div class="assistant-info-card">
+    <span class="mini-label">MODES</span>
+    <h3>AI 실행 모드</h3>
+
+    <button class="quick-question" type="button">이 프로젝트 구조를 쉽게 설명해줘</button>
+    <button class="quick-question" type="button">PDF 문서 기준으로 CCTV 관제와 관련된 내용을 설명해줘</button>
+    <button class="quick-question" type="button">오늘 최신 교통 이슈를 검색해서 알려줘</button>
+    <button class="quick-question" type="button">LangGraph가 이 프로젝트에서 어떤 역할인지 설명해줘</button>
+
+    <div class="mode-box">
+      <strong>자동 라우팅 기준</strong>
+      <p>문서/PDF/RAG → Retriever 모드</p>
+      <p>최신/검색/오늘 → Search 모드</p>
+      <p>그 외 → Basic Chain 모드</p>
+    </div>
+  </div>
+
+  <div class="assistant-chat-card">
+    <div id="chatMessages" class="chat-messages">
+      <div class="chat-message assistant">
+        <strong>AI 관제 보조</strong>
+        <p>질문을 입력하면 LangGraph가 질문 유형을 분류한 뒤 적절한 Chain으로 답변합니다.</p>
+      </div>
+    </div>
+
+    <form id="assistantForm" class="assistant-form">
+      <input
+        id="assistantInput"
+        type="text"
+        placeholder="예: PDF 문서 기준으로 정차 차량 대응 내용을 알려줘"
+        autocomplete="off"
+      >
+      <button type="submit">전송</button>
+    </form>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script type="module" src="{{ url_for('static', filename='js/pages/ai_assistant.js') }}"></script>
+{% endblock %}
